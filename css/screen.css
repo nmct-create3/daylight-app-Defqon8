@@ -2,15 +2,20 @@
 #FONTS
 \*------------------------------------*/
 
+@font-face {
+    font-family: "Work Sans";
+    font-weight: 400;
+    src: url("../fonts/WorkSans-Regular.woff2") format("woff2")
+}
+
 /*------------------------------------*\
 #Variables
 \*------------------------------------*/
 
 :root {
-    /* colors */
-
+    --color-font: #0F3557;
+    --color-back: #CCE7FF;
     /* opacity */
-
     /* transitions */
 }
 
@@ -27,16 +32,22 @@
 html {
     font-size: 16px;
     line-height: 1.5;
-    font-family: Helvetica, arial, sans-serif;
+    font-family: "Work Sans", arial, sans-serif;
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "zero" 1;
+    color: var(--color-font);
+    background-color: var(--color-back);
 }
 
-*,
-*:before,
-*:after {
+*, *:before, *:after {
     box-sizing: inherit;
+}
+
+html .is-night {
+    --color-front: #CCE7FF;
+    --color-back: #0F3557;
 }
 
 /*
@@ -79,9 +90,7 @@ img {
     Default markup for typographic elements
 */
 
-h1,
-h2,
-h3 {
+h1, h2, h3 {
     font-weight: 700;
 }
 
@@ -103,32 +112,22 @@ h3 {
     margin: 0 0 24px;
 }
 
-h4,
-h5,
-h6 {
+h4, h5, h6 {
     font-size: 16px;
     font-weight: 600;
     line-height: 24px;
     margin: 0 0 24px;
 }
 
-p,
-ol,
-ul,
-dl,
-table,
-address,
-figure {
+p, ol, ul, dl, table, address, figure {
     margin: 0 0 24px;
 }
 
-ul,
-ol {
+ul, ol {
     padding-left: 24px;
 }
 
-li ul,
-li ol {
+li ul, li ol {
     margin-bottom: 0;
 }
 
@@ -165,18 +164,15 @@ a {
     outline-offset: 2px;
 }
 
-a:visited,
-a:active {
+a:visited, a:active {
     color: red;
 }
 
-a:hover,
-a:focus {
+a:hover, a:focus {
     color: red;
 }
 
-label,
-input {
+label, input {
     display: block;
 }
 
@@ -205,18 +201,14 @@ input::placeholder {
     width: auto;
     overflow: visible;
     background: transparent;
-
     /* inherit font & color from ancestor */
     color: inherit;
     font: inherit;
-
     /* Normalize `line-height`. Cannot be changed from `normal` in Firefox 4+. */
     line-height: normal;
-
     /* Corrects font smoothing for webkit */
     -webkit-font-smoothing: inherit;
     -moz-osx-font-smoothing: inherit;
-
     /* Corrects inability to style clickable `input` types in iOS */
     -webkit-appearance: none;
 }
@@ -249,7 +241,12 @@ input::placeholder {
 */
 
 .c-logo {
-
+    line-height: 16px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    color: var(--color-font);
+    margin-bottom: 120%;
 }
 
 /*
@@ -259,11 +256,13 @@ input::placeholder {
 */
 
 .c-sun {
-
+    height: 22px;
+    width: 22px;
+    fill: var(--color-font);
 }
 
 .c-logo .c-sun {
-
+    margin-right: 8px;
 }
 
 /*
@@ -272,11 +271,82 @@ input::placeholder {
     Main app wrapper
 */
 
+.c-app {
+    width: 25%;
+    text-align: left;
+    padding: 50px;
+    margin: auto;
+}
+
+.c-app__summary {
+    font-size: 28px;
+    line-height: 40px;
+    display: block;
+}
+
+.c-app__location {
+    display: flex;
+    align-items: flex-end;
+}
+
 /*
     Component: Horizon
     ---
     Horizon with sun visualisation
 */
+
+.c-horizon__sky-wrapper {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    padding-top: 22px;
+    padding-right: 40px;
+}
+
+.c-horizon__sky {
+    position: relative;
+    height: 100%;
+}
+
+.c-horizon__sun {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    transform: translateY(22px);
+}
+
+.c-horizon__sun::before {
+    content: attr(data-time);
+    font-size: 12px;
+    line-height: 14px;
+}
+
+.c-sun {}
+
+.c-horizon__line {
+    border-top: 1px solid var(--color-font);
+    margin-bottom: 22px;
+    padding: 8px 0 12px 0;
+    justify-content: space-between;
+    display: flex;
+    font-size: 12px;
+    line-height: 14px;
+}
+
+.c-horizon__time--under {
+    content: attr(data-time);
+}
+
+.c-horizon__time {
+    content: attr(data-time);
+}
+
+.c-horizon__time--up {
+    content: attr(data-time);
+}
 
 /*------------------------------------*\
 #UTILITIES
@@ -286,6 +356,10 @@ input::placeholder {
     Utilities: Mute
     Mute with opacity
 */
+
+.u-muted {
+    opacity: 0.6
+}
 
 /*------------------------------------*\
 #STATES
@@ -309,9 +383,7 @@ input::placeholder {
 */
 
 @media print {
-    *,
-    *:before,
-    *:after {
+    *, *:before, *:after {
         background: transparent !important;
         color: #000 !important;
         /* Black prints faster:
@@ -319,8 +391,7 @@ input::placeholder {
         box-shadow: none !important;
         text-shadow: none !important;
     }
-    a,
-    a:visited {
+    a, a:visited {
         text-decoration: underline;
     }
     a[href]:after {
@@ -333,15 +404,13 @@ input::placeholder {
     * Don't show links that are fragment identifiers,
     * or use the `javascript:` pseudo protocol
     */
-    a[href^="#"]:after,
-    a[href^="javascript:"]:after {
+    a[href^="#"]:after, a[href^="javascript:"]:after {
         content: "";
     }
     pre {
         white-space: pre-wrap !important;
     }
-    pre,
-    blockquote {
+    pre, blockquote {
         border: 1px solid #999;
         page-break-inside: avoid;
     }
@@ -352,18 +421,14 @@ input::placeholder {
     thead {
         display: table-header-group;
     }
-    tr,
-    img {
+    tr, img {
         page-break-inside: avoid;
     }
-    p,
-    h2,
-    h3 {
+    p, h2, h3 {
         orphans: 3;
         widows: 3;
     }
-    h2,
-    h3 {
+    h2, h3 {
         page-break-after: avoid;
     }
 }
