@@ -28,30 +28,30 @@ let placeSunAndStartMoving = ( totalMinutes, sunrise ) => {
 
 	// Haal het DOM element van onze zon op en van onze aantal minuten resterend deze dag.
 	let sun = document.getElementsByClassName('js-sun');
-	sun.setAttribute('data-time', totalMinutes);
-	sun.style.left = totalMinutes+"px"
-	sun.style.bottom = totalMinutes+"px"
+	sun.setAttribute('data-time', timenow);
+	console.log(timenow);
+	console.log("time");
 	// Bepaal het aantal minuten dat de zon al op is.
 
 	// Nu zetten we de zon op de initiële goede positie ( met de functie updateSun ). Bereken hiervoor hoeveel procent er van de totale zon-tijd al voorbij is.
 
 	function updateSun(){
-		let passedTime = totalMinutes - _convertTime(sunrise)/100*totalMinutes
+		let sunremainingpercentage = minleft/totaltime*100
+		let sunpassedpercentage = minpassed/totaltime*100
 		// We voegen ook de 'is-loaded' class toe aan de body-tag.
 		let body = document.getElementById("body");
 		body.classList.add("is-loaded");
-
 		// Vergeet niet om het resterende aantal minuten in te vullen.
 	}
 
 	// Nu maken we een functie die de zon elke minuut zal updaten
 	setInterval(function sunIsUp() {
 		// Bekijk of de zon niet nog onder of reeds onder is
-		if(sun.getAttribute("date-time") == totalMinutes){
+		if(sun.getAttribute("data-time") == timenow){
 			//zon is op
-			sun.setAttribute('data-time', passedTime+"%")
-			sun.style.left = passedTime+"%"
-			sun.style.bottom = passedTime+"%"
+			sun.setAttribute('data-time', timenow)
+			sun.style.left = sunremainingpercentage+"%"
+			sun.style.bottom = sunremainingpercentage+"%"
 		}
 		else{
 			//zon is dood
@@ -78,10 +78,8 @@ let showResult = ( jsonResponse ) => {
 	let sunrise = jsonResponse.query.results.channel.astronomy.sunrise;
 	let sunset = jsonResponse.query.results.channel.astronomy.sunset;
 
-
 	// Hier gaan we een functie oproepen die de zon een bepaalde postie kan geven en dit kan updaten.
 	// Geef deze functie de periode tussen sunrise en sunset mee en het tijdstip van sunrise.
-	//console.log(sunrise, sunset);
 	document.getElementById("sunrise").innerHTML = _convertTime(sunrise);
 	document.getElementById('sunset').innerHTML = _convertTime(sunset);
 	document.getElementById('location').innerHTML = location;
@@ -90,7 +88,11 @@ let showResult = ( jsonResponse ) => {
 	let hours = currentTime.getHours()
 	let minutes = currentTime.getMinutes()
 	let timenow = hours + ":" + minutes
-	document.getElementById('minutesleft').innerHTML = _calculateTimeDistance(  _convertTime(timenow), _convertTime(sunset) )
+	let totaltime = _calculateTimeDistance(  _convertTime(sunrise), _convertTime(sunset) )
+	let minleft = _calculateTimeDistance(  _convertTime(timenow), _convertTime(sunset) )
+	let minpassed = _calculateTimeDistance(  _convertTime(sunrise), _convertTime(timenow) )
+
+	document.getElementById('minutesleft').innerHTML = minleft
 };
 
 // 2 Aan de hand van een longitude en latitude gaan we de yahoo wheater API ophalen.
@@ -123,5 +125,5 @@ document.addEventListener( 'DOMContentLoaded', function () {
 	console.log("loaded");
 	getAPI( 50.8027841, 3.2097454 );
 	showResult();
-	placeSunAndStartMoving();
+	placeSunAndStartMoving( totaltime, sunrise );
 });
